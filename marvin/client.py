@@ -1,9 +1,11 @@
 import dbus
 
 
-__all__ = ['client']
+__all__ = ['connect']
 
 
-bus = dbus.SessionBus()
-obj = bus.get_object('ua.douhack.marvin', '/ua/douhack/marvin')
-client = dbus.Interface(obj, 'ua.douhack.marvin')
+def connect():
+    bus = dbus.SessionBus()
+    obj = bus.get_object('ua.douhack.marvin', '/ua/douhack/marvin')
+    client = dbus.Interface(obj, 'ua.douhack.marvin')
+    return client
