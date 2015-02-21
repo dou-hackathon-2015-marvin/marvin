@@ -5,11 +5,11 @@ class ColumnExtension(GObject.GObject, Nautilus.MenuProvider):
         pass
 
     def send_files(self, menu, files):
-        print('send files:', [f.get_name() for f in files])
+        print('Send files:', [f.get_name() for f in files])
 
     def get_file_items(self, window, files):
         item = Nautilus.MenuItem(
-            name='SimpleMenuExtension::Show_File_Name',
+            name='MarvinExtension::Send_files',
             label='Send to...',
             tip='Send file via network'
         )
