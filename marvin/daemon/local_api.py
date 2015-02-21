@@ -12,7 +12,13 @@ from .internode_client import InternodeClient
 (SENDING, FINISHED, QUEUED, PENDING) = range(4)
 
 
-testfile = {'fid': 1, 'total': 1000, 'sent': 300, 'status': SENDING}
+testfile = {
+    'fid': 1,
+    'path': '/usr/local/etc/super.file',
+    'total': 1000,
+    'sent': 300,
+    'status': SENDING,
+}
 
 
 class MarvinDBUSService(dbus.service.Object):
@@ -46,7 +52,6 @@ class MarvinDBUSService(dbus.service.Object):
     @dbus.service.method('ua.douhack.marvin')
     def hist(self, count):
         return [testfile for _ in range(count)]
-
 
 
 class GLibLoopThread(threading.Thread):
