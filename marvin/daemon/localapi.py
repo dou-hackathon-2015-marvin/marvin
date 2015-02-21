@@ -4,7 +4,7 @@ import threading
 import dbus
 import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
-from gi.repository import Gtk, GObject, Gdk, GLib
+from gi.repository import GObject, GLib
 
 
 class MarvinDBUSService(dbus.service.Object):
@@ -41,7 +41,7 @@ class GLibLoopThread(threading.Thread):
             logging.info("Stopped")
 
 
-def start_localclient():
+def start_localserver():
     global dbus_service, glib_thread
     dbus_service = MarvinDBUSService()
     glib_thread = GLibLoopThread()
