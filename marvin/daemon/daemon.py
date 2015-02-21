@@ -1,10 +1,10 @@
 import logging
-from threading import Thread
+import threading
 
 import dbus
 import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
-import glib
+from gi.repository import Gtk, GObject, Gdk, GLib
 
 
 class MarvinDBUSService(dbus.service.Object):
@@ -19,20 +19,25 @@ class MarvinDBUSService(dbus.service.Object):
         return msg
 
 
-class DBUSThread(Thread):
+class GLibLoopThread(threading.Thread):
     def __init__(self, *args, **kwargs):
-        super(DBUSThread, self).__init__(*args, **kwargs)
-        self.service = MarvinDBUSService()
+        super(GLibLoopThread, self).__init__(*args, **kwargs)
         self.loop = None
 
     def run(self):
         logging.info("Starting DBUS Server")
-        self.loop = glib.MainLoop()
-        self.loop.run()
+        self.loop = GLib.MainLoop()
+        try:
+            self.loop.run()
+        finally:
+            logging.info("Stopped")
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    dbus_thread = DBUSThread()
+    dbus_service = MarvinDBUSService()
+
+    dbus_thread = GLibLoopThread()
     dbus_thread.start()
+
     print("some code here")
