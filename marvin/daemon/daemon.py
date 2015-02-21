@@ -1,9 +1,10 @@
+import logging
+from threading import Thread
+
 import dbus
 import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 import glib
-
-# https://github.com/thp/python-eventfeed/blob/master/eventfeed.py
 
 
 class MarvinDBUSService(dbus.service.Object):
@@ -14,11 +15,24 @@ class MarvinDBUSService(dbus.service.Object):
         dbus.service.Object.__init__(self, self.bus_name, '/ua/douhack/marvin')
 
     @dbus.service.method('ua.douhack.marvin')
-    def ping(self, str):
-        print("PING RECEIVED")
-        return str + ": pong"
+    def echo(self, msg):
+        return msg
+
+
+class DBUSThread(Thread):
+    def __init__(self, *args, **kwargs):
+        super(DBUSThread, self).__init__(*args, **kwargs)
+        self.service = MarvinDBUSService()
+        self.loop = None
+
+    def run(self):
+        logging.info("Starting DBUS Server")
+        self.loop = glib.MainLoop()
+        self.loop.run()
+
 
 if __name__ == "__main__":
-    loop = glib.MainLoop()
-    service = MarvinDBUSService()
-    loop.run()
+    logging.basicConfig(level=logging.DEBUG)
+    dbus_thread = DBUSThread()
+    dbus_thread.start()
+    print("some code here")
