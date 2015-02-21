@@ -78,12 +78,12 @@ def send_file(filename, target_host, target_port):
     return job_id
 
 
-def is_in_progress(job):
-    return job["status"] not in [CANCELED, ERROR, FINISHED]
+def is_in_progress(status):
+    return status not in [CANCELED, ERROR, FINISHED]
 
 
 def get_sending_jobs():
-    return [job for job in jobs if is_in_progress(job["status"])]
+    return [job for job in jobs if is_in_progress(job.status)]
 
 
 def get_job(job_id):
