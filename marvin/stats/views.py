@@ -1,13 +1,14 @@
 
 from flask import Flask
 from flask import render_template
-import logging
+from marvin import client
 app = Flask(__name__)
 
 @app.route('/')
 def home_page():
+    # get list of transfered files
+    files = client.list_files()
+    return render_template('home_page.html', files=files)
 
-    return render_template('home_page.html', name=None)
-
-if __name__ == '__main__':
+def start():
     app.run(debug=True)
