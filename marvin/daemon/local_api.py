@@ -12,7 +12,13 @@ from .internode_client import InternodeClient
 (SENDING, FINISHED, QUEUED, PENDING) = range(4)
 
 
-testfile = {'fid': 1, 'total': 1000, 'sent': 300, 'status': SENDING}
+testfile = {
+    'fid': 1,
+    'path': '/usr/local/etc/super.file',
+    'total': 1000,
+    'sent': 300,
+    'status': SENDING,
+}
 
 
 class MarvinDBUSService(dbus.service.Object):
