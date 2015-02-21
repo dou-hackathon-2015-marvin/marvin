@@ -7,18 +7,7 @@ import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GObject, GLib
 from .internode_client import InternodeClient
-
-
-(SENDING, FINISHED, QUEUED, PENDING) = range(4)
-
-
-testfile = {
-    'fid': 1,
-    'path': '/usr/local/etc/super.file',
-    'total': 1000,
-    'sent': 300,
-    'status': SENDING,
-}
+from . import tracking
 
 
 class MarvinDBUSService(dbus.service.Object):
@@ -39,19 +28,20 @@ class MarvinDBUSService(dbus.service.Object):
 
     @dbus.service.method('ua.douhack.marvin')
     def list_sending(self):
-        return [testfile, testfile]
+        return tracking.get_sending_jobs()
 
     @dbus.service.method('ua.douhack.marvin')
-    def send_file(self, filename, target):
-        logging.debug("send file '{}' to {}".format(filename, target))
+    def send_file(self, filename, target_host, target_port):
+        logging.debug("send file '{}' to {}:{}".format(filename, target_host, target_port))
+        return tracking.send_file(str(filename), target_host, target_port)
 
     @dbus.service.method('ua.douhack.marvin')
     def info(self, fid):
-        return testfile
+        return tracking.get_job(fid)
 
     @dbus.service.method('ua.douhack.marvin')
     def hist(self, count):
-        return [testfile for _ in range(count)]
+        return [tracking.testfile for _ in range(count)]
 
 
 class GLibLoopThread(threading.Thread):
