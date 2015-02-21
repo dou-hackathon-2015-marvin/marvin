@@ -2,7 +2,6 @@
 from flask import Flask
 from flask import render_template
 from marvin.client import connect
-import logging
 
 app = Flask(__name__, static_url_path='/static')
 
