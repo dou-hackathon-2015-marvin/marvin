@@ -9,7 +9,7 @@ import logging
 import threading
 
 from thrift.protocol import TBinaryProtocol
-from thrift.server import TNonblockingServer
+from thrift.server import TServer
 from thrift.transport import TSocket, TTransport
 
 from Marvin import MarvinService
@@ -17,7 +17,7 @@ from Marvin import MarvinService
 
 class MarvinThriftHandler(object):
     def say_hello(self):
-        return "pong"
+        return "saying hello"
 
     def say_echo(self, s):
         return s
@@ -36,7 +36,7 @@ class ThriftServiceThread(threading.Thread):
         transport_factory = TTransport.TBufferedTransportFactory()
         protocol_factory = TBinaryProtocol.TBinaryProtocolFactory()
 
-        self.server = TNonblockingServer.TNonblockingServer(processor, transport, transport_factory, protocol_factory)
+        self.server = TServer.TThreadedServer(processor, transport, transport_factory, protocol_factory)
 
         logging.info('Starting Thrift server...')
         try:

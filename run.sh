@@ -18,4 +18,25 @@ echo $! > ${RUNDIR}/marvin_daemon.pid
 gunicorn marvin.stats.views:app -b 127.0.0.1:5000 &
 echo $! > ${RUNDIR}/marvin_stats.pid
 sleep 1
-echo "MARVIN STARTED"
+
+echo "             *     ,MMM8&&&.            *"
+echo "                  MMMM88&&&&&    ."
+echo "                 MMMM88&&&&&&&"
+echo "     *           MMM88&&&&&&&&"
+echo "                 MMM88&&&&&&&&"
+echo "                 'MMM88&&&&&&'"
+echo "                   'MMM8&&&'      *"
+echo "          |\___/|"
+echo "          )     (             .              '"
+echo "         =\     /="
+echo "           )===(       *"
+echo "          /     \ "
+echo "          |     |"
+echo "         /       \ "
+echo "         \       /"
+echo "  _/\_/\_/\__  _/_/\_/\_/\_/\_/\_/\_/\_/\_/\_"
+echo "  |  |  |  |( (  |  |  |  |  |  |  |  |  |  |"
+echo "  |  |  |  | ) ) |  |  |  |  |  |  |  |  |  |"
+echo "  |  |  |  |(_(  |  |  |  |  |  |  |  |  |  |"
+echo "  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |"
+echo "  jgs|  |  |  |  |  MARVIN STARTED |  |  |  |"

@@ -1,8 +1,9 @@
+import logging
 import os
 import sys
 
 sys.path.append(os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'thrift/gen-py'))
+    os.path.dirname(os.path.abspath(__file__)), '../thrift/gen-py'))
 
 from thrift.transport import TSocket
 from thrift.transport import TTransport
@@ -18,6 +19,7 @@ class InternodeClient(object):
         protocol = TBinaryProtocol.TBinaryProtocol(self.transport)
         self.client = Client(protocol)
         self.transport.open()
+        logging.debug("Thrift transport to {}:{} opened".format(host, port))
 
     def ping(self):
         return self.client.say_hello()

@@ -6,6 +6,7 @@ import dbus
 import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GObject, GLib
+from .internode_client import InternodeClient
 
 
 (SENDING, FINISHED, QUEUED, PENDING) = range(4)
@@ -24,6 +25,11 @@ class MarvinDBUSService(dbus.service.Object):
     @dbus.service.method('ua.douhack.marvin')
     def echo(self, msg):
         return msg
+
+    @dbus.service.method('ua.douhack.marvin')
+    def ping_thrift(self, host, port):
+        i_client = InternodeClient(host, port)
+        return i_client.ping()
 
     @dbus.service.method('ua.douhack.marvin')
     def list_sending(self):
