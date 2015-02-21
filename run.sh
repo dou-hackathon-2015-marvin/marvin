@@ -1,7 +1,7 @@
+#!/bin/bash
+
 RUNDIR=`pwd`
 
-
-#!/bin/bash
 if [ x"$1" == "xstop" ]; then
     echo "STOPPING..."
     kill `cat ${RUNDIR}/marvin_daemon.pid` && echo "DAEMON STOPPED"
