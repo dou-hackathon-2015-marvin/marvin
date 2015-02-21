@@ -1,3 +1,4 @@
+from collections import namedtuple
 import logging
 import threading
 
@@ -5,6 +6,12 @@ import dbus
 import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GObject, GLib
+
+
+(SENDING, FINISHED, QUEUED, PENDING) = range(4)
+
+
+testfile = {'fid': 1, 'total': 1000, 'sent': 300, 'status': SENDING}
 
 
 class MarvinDBUSService(dbus.service.Object):
@@ -19,12 +26,21 @@ class MarvinDBUSService(dbus.service.Object):
         return msg
 
     @dbus.service.method('ua.douhack.marvin')
-    def list_files(self):
-        return ['File Name 1', 'File Name 2']
+    def list_sending(self):
+        return [testfile, testfile]
 
     @dbus.service.method('ua.douhack.marvin')
     def send_file(self, filename, target):
         logging.debug("send file '{}' to {}".format(filename, target))
+
+    @dbus.service.method('ua.douhack.marvin')
+    def info(self, fid):
+        return testfile
+
+    @dbus.service.method('ua.douhack.marvin')
+    def hist(self, count):
+        return [testfile for _ in range(count)]
+
 
 
 class GLibLoopThread(threading.Thread):
