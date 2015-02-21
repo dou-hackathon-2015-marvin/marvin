@@ -42,7 +42,6 @@ class MarvinDBUSService(dbus.service.Object):
         return [testfile for _ in range(count)]
 
 
-
 class GLibLoopThread(threading.Thread):
     def __init__(self, stop_callback, *args, **kwargs):
         super(GLibLoopThread, self).__init__(*args, **kwargs)
