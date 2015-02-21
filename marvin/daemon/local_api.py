@@ -27,7 +27,7 @@ class MarvinDBUSService(dbus.service.Object):
         return msg
 
     @dbus.service.method('ua.douhack.marvin')
-    def ping_thrift(self, host, port, msg):
+    def ping_thrift(self, host, port):
         i_client = InternodeClient(host, port)
         return i_client.ping()
 
