@@ -1,43 +1,8 @@
 import logging
-import threading
-
-import dbus
-import dbus.service
-from dbus.mainloop.glib import DBusGMainLoop
-from gi.repository import Gtk, GObject, Gdk, GLib
-
-
-class MarvinDBUSService(dbus.service.Object):
-    def __init__(self):
-        dbus_main_loop = DBusGMainLoop(set_as_default=True)
-        self.session_bus = dbus.SessionBus(dbus_main_loop)
-        self.bus_name = dbus.service.BusName('ua.douhack.marvin', bus=self.session_bus)
-        dbus.service.Object.__init__(self, self.bus_name, '/ua/douhack/marvin')
-
-    @dbus.service.method('ua.douhack.marvin')
-    def echo(self, msg):
-        return msg
-
-
-class GLibLoopThread(threading.Thread):
-    def __init__(self, *args, **kwargs):
-        super(GLibLoopThread, self).__init__(*args, **kwargs)
-        self.loop = None
-
-    def run(self):
-        logging.info("Starting DBUS Server")
-        self.loop = GLib.MainLoop()
-        try:
-            self.loop.run()
-        finally:
-            logging.info("Stopped")
-
+from localapi import start_localclient
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
-    dbus_service = MarvinDBUSService()
-
-    dbus_thread = GLibLoopThread()
-    dbus_thread.start()
+    start_localclient()
 
     print("some code here")
