@@ -10,10 +10,10 @@ class MarvinExtension(GObject.GObject, Nautilus.MenuProvider):
         self.marvin = dbus.Interface(obj, 'ua.douhack.marvin')
 
     def send_file(self, menu, file, target):
-        filename = file.get_name()
+        filename = file.get_uri()
         os.system('notify-send "Sending {} to {}"'.format(filename, target))
 
-        self.marvin.send_file(filename, target)
+        self.marvin.send_file(filename.replace("file://", ""), target, 9042)
         print('Sending file:', filename)
 
     def get_file_items(self, window, files):

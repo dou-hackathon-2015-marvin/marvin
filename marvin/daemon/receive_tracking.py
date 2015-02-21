@@ -18,7 +18,7 @@ def initiate_transfer(job_id, filename, total):
 def get_filename(job_id):
     job = jobs[job_id]
     home = os.path.expanduser("~")
-    return os.path.join(home, "Downloads", job["filename"])
+    return os.path.join(home, "Downloads", "Marvin", job["filename"])
 
 
 def append_chunk(job_id, chunk):
