@@ -83,7 +83,7 @@ def is_in_progress(status):
 
 
 def get_sending_jobs():
-    return [job for job in jobs if is_in_progress(job.status)]
+    return [job for job in jobs.values() if is_in_progress(job.status)]
 
 
 def get_job(job_id):
@@ -98,3 +98,7 @@ def create_test_job():
         sent=0,
         status=SENDING
     )
+
+
+def get_jobs():
+    return [j for j in jobs.values()]
