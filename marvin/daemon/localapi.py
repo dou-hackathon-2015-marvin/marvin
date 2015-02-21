@@ -18,6 +18,10 @@ class MarvinDBUSService(dbus.service.Object):
     def echo(self, msg):
         return msg
 
+    @dbus.service.method('ua.douhack.marvin')
+    def send_file(self, filename, target):
+        logging.debug("send file '{}' to {}".format(filename, target))
+
 
 class GLibLoopThread(threading.Thread):
     def __init__(self, *args, **kwargs):
