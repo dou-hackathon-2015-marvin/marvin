@@ -2,18 +2,22 @@
 <html lang="en">
 
   <head>
+
     <meta charset="utf-8">
-    <title>File exchange</title>
+    <title>Marvin stats</title>
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+
   </head>
 
   <body>
-
-    <title>Marvin stats</title>
 
     <ul></ul>
         <li><h2>Отправленные файлы</h2><li/>
         <li><h2>Отправляемые файлы</h2><li/>
     <ul/>
+
+    <script src="{{ url_for('static', filename='js/jquery-1.11.2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
   </body>
 </html>
