@@ -10,18 +10,37 @@
 
   <body>
 
-    <ul></ul>
-        <li><h2>Отправленные файлы</h2><li/>
-        <li><h2>Отправляемые файлы</h2><li/>
-        <ul class="list-group">
-            {% for file in files %}
-                <li class="list-group-item">{{ file }}</li>
-            {% endfor %}
-        </ul>
-    <ul/>
+  <div class="container">
+    <h2>Отправленные файлы</h2>
+    <h2>Отправляемые файлы</h2>
+    <div class="panel panel-default">         
+      <table class="table">
+        <thead>
+          <tr>
+            <th>fid</th>
+            <th>File Name</th>
+            <th>sent</th>
+            <th>total size</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for file in files %}
+            <tr>
+              <th scope="row">1</th>
+              <td>{{ file.fid }}</td>
+              <td>{{ file.sent }}</td>
+              <td>{{ file.total }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  <div/>
+
 
     <script src="{{ url_for('static', filename='js/jquery-1.11.2.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 
   </body>
 </html>
+

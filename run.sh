@@ -8,7 +8,19 @@ if [ x"$1" == "xstop" ]; then
     rm ${RUNDIR}/marvin_daemon.pid
     kill `cat ${RUNDIR}/marvin_stats.pid` && echo "STATS STOPPED"
     rm ${RUNDIR}/marvin_stats.pid
-    echo "MARVIN STOPPED"
+    echo "           ___ "
+    echo "    ,_    '---'    _, "
+    echo '    \ `-._|\_/|_.-- / '
+    echo "     |   =)'T'(=   | "
+    echo '      \   /`"`\   / '
+    echo "  jgs  '._\) (/_.' "
+    echo "           | | "
+    echo "          /\ /\ "
+    echo "          \ T /"
+    echo "          (/ \)\ "
+    echo "               ))"
+    echo "              (("
+    echo "MARVIN STOPPED \)"
     exit
 fi
 
