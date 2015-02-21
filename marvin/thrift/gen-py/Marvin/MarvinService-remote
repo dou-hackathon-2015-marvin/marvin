@@ -26,6 +26,9 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
   print('Functions:')
   print('  string say_hello()')
   print('  string say_echo(string str)')
+  print('  bool send_file_request(string path, string job_id, i32 size)')
+  print('  void send_chunk(string job_id, string chunk)')
+  print('  void finish_sending(string job_id)')
   print('')
   sys.exit(0)
 
@@ -93,6 +96,24 @@ elif cmd == 'say_echo':
     print('say_echo requires 1 args')
     sys.exit(1)
   pp.pprint(client.say_echo(args[0],))
+
+elif cmd == 'send_file_request':
+  if len(args) != 3:
+    print('send_file_request requires 3 args')
+    sys.exit(1)
+  pp.pprint(client.send_file_request(args[0],args[1],eval(args[2]),))
+
+elif cmd == 'send_chunk':
+  if len(args) != 2:
+    print('send_chunk requires 2 args')
+    sys.exit(1)
+  pp.pprint(client.send_chunk(args[0],args[1],))
+
+elif cmd == 'finish_sending':
+  if len(args) != 1:
+    print('finish_sending requires 1 args')
+    sys.exit(1)
+  pp.pprint(client.finish_sending(args[0],))
 
 else:
   print('Unrecognized method %s' % cmd)

@@ -23,3 +23,12 @@ class InternodeClient(object):
 
     def ping(self):
         return self.client.say_hello()
+
+    def send_file_request(self, path, job_id, size):
+        return self.client.send_file_request(path, job_id, size)
+
+    def send_chunk(self, job_id, chunk):
+        return self.client.send_chunk(job_id, chunk)
+
+    def finish_sending(self, job_id):
+        return self.client.finish_sending(job_id)

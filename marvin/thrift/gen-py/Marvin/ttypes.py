@@ -16,20 +16,3 @@ except:
   fastbinary = None
 
 
-class HelloLanguage:
-  ENGLISH = 0
-  FRENCH = 1
-  SPANISH = 2
-
-  _VALUES_TO_NAMES = {
-    0: "ENGLISH",
-    1: "FRENCH",
-    2: "SPANISH",
-  }
-
-  _NAMES_TO_VALUES = {
-    "ENGLISH": 0,
-    "FRENCH": 1,
-    "SPANISH": 2,
-  }
-

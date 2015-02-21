@@ -14,6 +14,8 @@ from thrift.transport import TSocket, TTransport
 
 from Marvin import MarvinService
 
+from .receive_tracking import initiate_transfer, append_chunk
+
 
 class MarvinThriftHandler(object):
     def say_hello(self):
@@ -21,6 +23,18 @@ class MarvinThriftHandler(object):
 
     def say_echo(self, s):
         return s
+
+    def send_file_request(self, filename, job_id, size):
+        logging.info("SEND FILE REQUEST [{}] {}".format(job_id, filename))
+        initiate_transfer(job_id, filename, size)
+        return True
+
+    def send_chunk(self, job_id, chunk):
+        logging.info("DATA CHUNK RECEIVED FOR {}".format(job_id))
+        append_chunk(job_id, chunk)
+
+    def finish_sending(self, job_id):
+        logging.info("FINISHED RECEIVING {}".format(job_id))
 
 
 class ThriftServiceThread(threading.Thread):

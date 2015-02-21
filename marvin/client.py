@@ -1,5 +1,5 @@
 import dbus
-from daemon.tracking import JobStuct
+from daemon.transmit_tracking import JobStuct
 
 
 __all__ = ['connect']

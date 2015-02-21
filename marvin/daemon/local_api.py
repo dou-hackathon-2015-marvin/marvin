@@ -7,7 +7,7 @@ import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GObject, GLib
 from .internode_client import InternodeClient
-from . import tracking
+from . import transmit_tracking
 
 
 class MarvinDBUSService(dbus.service.Object):
@@ -28,20 +28,20 @@ class MarvinDBUSService(dbus.service.Object):
 
     @dbus.service.method('ua.douhack.marvin')
     def list_sending(self):
-        return tracking.get_sending_jobs()
+        return transmit_tracking.get_sending_jobs()
 
     @dbus.service.method('ua.douhack.marvin')
     def send_file(self, filename, target_host, target_port):
         logging.debug("send file '{}' to {}:{}".format(filename, target_host, target_port))
-        return tracking.send_file(str(filename), target_host, target_port)
+        return transmit_tracking.send_file(str(filename), target_host, target_port)
 
     @dbus.service.method('ua.douhack.marvin')
     def info(self, fid):
-        return tracking.create_test_job()
+        return transmit_tracking.get_job(fid)
 
     @dbus.service.method('ua.douhack.marvin')
     def hist(self, count):
-        return [tracking.create_test_job() for _ in range(count)]
+        return [transmit_tracking.create_test_job() for _ in range(count)]
 
     @dbus.service.method('ua.douhack.marvin')
     def discover(self):
