@@ -46,7 +46,7 @@ class MarvinDBUSService(dbus.service.Object):
 
     @dbus.service.method('ua.douhack.marvin')
     def discover(self):
-        return ['192.168.0.1', '192.168.0.2', '192.168.0.3', '192.168.0.4']
+        return ['127.0.0.1', '192.168.0.1', '192.168.0.2', '192.168.0.3', '192.168.0.4']
 
 
 class GLibLoopThread(threading.Thread):
