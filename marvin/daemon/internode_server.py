@@ -9,7 +9,7 @@ import logging
 import threading
 
 from thrift.protocol import TBinaryProtocol
-from thrift.server import TNonblockingServer, TServer
+from thrift.server import TServer
 from thrift.transport import TSocket, TTransport
 
 from Marvin import MarvinService
