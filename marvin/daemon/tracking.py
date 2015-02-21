@@ -31,3 +31,13 @@ def get_sending_jobs():
 
 def get_job(fid):
     return jobs[fid]
+
+
+def create_test_job():
+    return JobStuct(
+        id="0e0fef87-612c-4b27-a43f-c9544ca69f57",
+        path="/home/arturdent/testfile",
+        total=1000,
+        sent=0,
+        status=SENDING
+    )

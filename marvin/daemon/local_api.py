@@ -37,11 +37,11 @@ class MarvinDBUSService(dbus.service.Object):
 
     @dbus.service.method('ua.douhack.marvin')
     def info(self, fid):
-        return tracking.get_job(fid)
+        return tracking.create_test_job()
 
     @dbus.service.method('ua.douhack.marvin')
     def hist(self, count):
-        return [tracking.testfile for _ in range(count)]
+        return [tracking.create_test_job() for _ in range(count)]
 
 
 class GLibLoopThread(threading.Thread):
