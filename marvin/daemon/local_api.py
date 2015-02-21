@@ -28,8 +28,9 @@ class MarvinDBUSService(dbus.service.Object):
 
 
 class GLibLoopThread(threading.Thread):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, stop_callback, *args, **kwargs):
         super(GLibLoopThread, self).__init__(*args, **kwargs)
+        self.stop_callback = stop_callback
         self.loop = None
 
     def run(self):
@@ -37,12 +38,15 @@ class GLibLoopThread(threading.Thread):
         self.loop = GLib.MainLoop()
         try:
             self.loop.run()
+        except KeyboardInterrupt:
+            if self.stop_callback:
+                self.stop_callback()
         finally:
-            logging.info("Stopped")
+            logging.info("Stopped GLib MainLoop")
 
 
-def start_localserver():
+def start_localserver(stop_callback):
     global dbus_service, glib_thread
     dbus_service = MarvinDBUSService()
-    glib_thread = GLibLoopThread()
+    glib_thread = GLibLoopThread(stop_callback)
     glib_thread.start()
