@@ -22,6 +22,10 @@ class MarvinDBUSService(dbus.service.Object):
     def list_files(self):
         return ['File Name 1', 'File Name 2']
 
+    @dbus.service.method('ua.douhack.marvin')
+    def send_file(self, filename, target):
+        logging.debug("send file '{}' to {}".format(filename, target))
+
 
 class GLibLoopThread(threading.Thread):
     def __init__(self, *args, **kwargs):
