@@ -12,39 +12,14 @@
 
   <div class="container">
 
-    <h2>Отправленные файлы</h2>
-
-      <div id="sent" class="panel panel-default">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>fid</th>
-              <th>File Name</th>
-              <th>sent</th>
-              <th>total size</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for file in hist_files %}
-              <tr>
-                <th scope="row">{{ file.id }}</th>
-                <td>{{ file.path }}</td>
-                <td>{{ file.sent|sizeof_fmt }}</td>
-                <td>{{ file.total|sizeof_fmt }}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-    </div>
-
     <h2>Отправляемые файлы</h2>
 
     <div id="sending" class="panel panel-default">
       <table class="table">
         <thead>
           <tr>
-            <th>fid</th>
             <th>File Name</th>
+            <th>Target</th>
             <th>sent</th>
             <th>total size</th>
             <th>progress</th>
@@ -53,8 +28,9 @@
         <tbody>
           {% for file in current_files %}
             <tr>
-              <th scope="row">{{ file.id }}</th>
+
               <td>{{ file.path }}</td>
+              <td>{{ file.target }}</td>
               <td>{{ file.sent|sizeof_fmt }}</td>
               <td>{{ file.total|sizeof_fmt }}</td>
               <td>
@@ -71,6 +47,35 @@
         </tbody>
       </table>
     </div>
+
+
+    <h2>Отправленные файлы</h2>
+
+      <div id="sent" class="panel panel-default">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>File Name</th>
+              <th>Target</th>
+              <th>sent</th>
+              <th>total size</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for file in hist_files %}
+              <tr>
+                <td>{{ file.start_time|datetime }}</td>
+                <td>{{ file.path }}</td>
+                <td>{{ file.target }}</td>
+                <td>{{ file.sent|sizeof_fmt }}</td>
+                <td>{{ file.total|sizeof_fmt }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+
 
   <div/>
 
