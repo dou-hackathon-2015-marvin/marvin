@@ -60,6 +60,7 @@ class ThriftServiceThread(threading.Thread):
         except KeyboardInterrupt:
             pass
         finally:
+            zeroconf_utils.unpublish_service()
             logging.info("Stopped")
 
 
