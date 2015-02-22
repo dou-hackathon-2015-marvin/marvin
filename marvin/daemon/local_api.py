@@ -6,6 +6,7 @@ import dbus
 import dbus.service
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GObject, GLib
+from . import zeroconf_browser
 from .internode_client import InternodeClient
 from . import transmit_tracking
 
@@ -47,7 +48,7 @@ class MarvinDBUSService(dbus.service.Object):
 
     @dbus.service.method('ua.douhack.marvin')
     def discover(self):
-        return ['127.0.0.1', '192.168.0.1', '192.168.0.2', '192.168.0.3', '192.168.0.4']
+        return [host["ip_address"] for host in zeroconf_browser.find_all_marvins()]
 
 
 class GLibLoopThread(threading.Thread):

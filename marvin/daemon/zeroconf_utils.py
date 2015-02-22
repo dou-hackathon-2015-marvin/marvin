@@ -1,74 +1,51 @@
 import dbus
 import avahi
 
-# http://avahi.org/wiki/PythonPublishExample
-
-serviceName = "Marvin"
-serviceType = "_marvin._tcp"  # See http://www.dns-sd.org/ServiceTypes.html
-servicePort = 9042
-serviceTXT = ""  # TXT record for the service
-
-domain = ""  # Domain to publish on, default to .local
-host = ""  # Host to publish records for, default to localhost
-
-group = None  # our entry group
-rename_count = 12  # Counter so we only rename after collisions a sensible number of times
+# http://stackp.online.fr/?p=35
 
 
-def add_service():
-    global group, serviceName, serviceType, servicePort, serviceTXT, domain, host
-    if group is None:
-        group = dbus.Interface(
-                bus.get_object(avahi.DBUS_NAME, server.EntryGroupNew()),
-                avahi.DBUS_INTERFACE_ENTRY_GROUP)
-        group.connect_to_signal('StateChanged', entry_group_state_changed)
+class ZeroconfService:
+    def __init__(self, name, port, stype="_http._tcp",
+                 domain="", host="", text=""):
+        self.name = name
+        self.stype = stype
+        self.domain = domain
+        self.host = host
+        self.port = port
+        self.text = text
 
-    print "Adding service '%s' of type '%s' ..." % (serviceName, serviceType)
+    def publish(self):
+        bus = dbus.SystemBus()
+        server = dbus.Interface(
+                         bus.get_object(
+                                 avahi.DBUS_NAME,
+                                 avahi.DBUS_PATH_SERVER),
+                        avahi.DBUS_INTERFACE_SERVER)
 
-    group.AddService(
-            avahi.IF_UNSPEC,    #interface
-            avahi.PROTO_UNSPEC, #protocol
-            dbus.UInt32(0),                  #flags
-            serviceName, serviceType,
-            domain, host,
-            dbus.UInt16(servicePort),
-            avahi.string_array_to_txt_array(serviceTXT))
-    group.Commit()
+        g = dbus.Interface(
+                    bus.get_object(avahi.DBUS_NAME,
+                                   server.EntryGroupNew()),
+                    avahi.DBUS_INTERFACE_ENTRY_GROUP)
+
+        g.AddService(avahi.IF_UNSPEC, avahi.PROTO_UNSPEC,dbus.UInt32(0),
+                     self.name, self.stype, self.domain, self.host,
+                     dbus.UInt16(self.port), self.text)
+
+        g.Commit()
+        self.group = g
+
+    def unpublish(self):
+        self.group.Reset()
 
 
-def remove_service():
-    global group
-
-    if not group is None:
-        group.Reset()
-
-def server_state_changed(state):
-    if state == avahi.SERVER_COLLISION:
-        print "WARNING: Server name collision"
-        remove_service()
-    elif state == avahi.SERVER_RUNNING:
-        add_service()
-
-def entry_group_state_changed(state, error):
-    global serviceName, server, rename_count
-
-    print "state change: %i" % state
-
-    if state == avahi.ENTRY_GROUP_ESTABLISHED:
-        print "Service established."
-    elif state == avahi.ENTRY_GROUP_COLLISION:
-        print ":("
-        return
-    elif state == avahi.ENTRY_GROUP_FAILURE:
-        print "Error in group state changed", error
-        return
+zeroconf_service = ZeroconfService("Marvin", 9042, "_marvin._tcp")
 
 
 def register_service():
-    global server, bus
-    bus = dbus.SystemBus()
-    server = dbus.Interface(
-        bus.get_object(avahi.DBUS_NAME, avahi.DBUS_PATH_SERVER),
-        avahi.DBUS_INTERFACE_SERVER)
-    server.connect_to_signal("StateChanged", server_state_changed)
-    server_state_changed(server.GetState())
+    global zeroconf_service
+    zeroconf_service.publish()
+
+
+def unpublish_service():
+    global zeroconf_service
+    zeroconf_service.unpuslish()
