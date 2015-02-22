@@ -1,5 +1,6 @@
 import os
 import dbus
+from urlparse import urlparse, unquote
 from gi.repository import Nautilus, GObject
 
 
@@ -10,11 +11,11 @@ class MarvinExtension(GObject.GObject, Nautilus.MenuProvider):
         self.marvin = dbus.Interface(obj, 'ua.douhack.marvin')
 
     def send_file(self, menu, file, target):
-        filename = file.get_uri()
-        os.system('notify-send "Sending {} to {}"'.format(filename, target))
+        path = unquote(urlparse(file.get_uri()).path)
+        os.system('notify-send "Sending {} to {}"'.format(path, target))
 
-        self.marvin.send_file(filename.replace("file://", ""), target, 9042)
-        print('Sending file:', filename)
+        self.marvin.send_file(path, target, 9042)
+        print('Sending file:', path)
 
     def get_file_items(self, window, files):
         if len(files) > 1:

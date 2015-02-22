@@ -43,8 +43,8 @@ class MarvinDBUSService(dbus.service.Object):
 
     @dbus.service.method('ua.douhack.marvin')
     def send_file(self, filename, target_host, target_port):
-        logging.debug("send file '{}' to {}:{}".format(filename, target_host, target_port))
-        return transmit_tracking.send_file(str(filename), target_host, target_port)
+        logging.debug(u"send file '{}' to {}:{}".format(filename, target_host, target_port))
+        return transmit_tracking.send_file(filename.encode('utf-8'), target_host, target_port)
 
     @dbus.service.method('ua.douhack.marvin')
     def info(self, fid):
