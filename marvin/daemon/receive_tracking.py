@@ -1,3 +1,5 @@
+import hashlib
+import logging
 import os
 
 jobs = {}
@@ -29,5 +31,11 @@ def append_chunk(job_id, chunk):
         f.write(chunk)
 
 
-def finish_sending(job_id):
-    os.rename(get_filename(job_id, part=True), get_filename(job_id, part=False))
+def finish_sending(job_id, expected_md5):
+    received_md5 = hashlib.md5(open(get_filename(job_id, part=True), 'rb').read()).hexdigest()
+    if expected_md5 != received_md5:
+        logging.error("WRONG MD5: expected {} but got {}".format(expected_md5, received_md5))
+
+        os.rename(get_filename(job_id, part=True), get_filename(job_id, part=False) + ".error")
+    else:
+        os.rename(get_filename(job_id, part=True), get_filename(job_id, part=False))

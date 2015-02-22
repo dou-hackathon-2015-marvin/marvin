@@ -45,10 +45,11 @@ class Iface:
     """
     pass
 
-  def finish_sending(self, job_id):
+  def finish_sending(self, job_id, md5):
     """
     Parameters:
      - job_id
+     - md5
     """
     pass
 
@@ -183,18 +184,20 @@ class Client(Iface):
     iprot.readMessageEnd()
     return
 
-  def finish_sending(self, job_id):
+  def finish_sending(self, job_id, md5):
     """
     Parameters:
      - job_id
+     - md5
     """
-    self.send_finish_sending(job_id)
+    self.send_finish_sending(job_id, md5)
     self.recv_finish_sending()
 
-  def send_finish_sending(self, job_id):
+  def send_finish_sending(self, job_id, md5):
     self._oprot.writeMessageBegin('finish_sending', TMessageType.CALL, self._seqid)
     args = finish_sending_args()
     args.job_id = job_id
+    args.md5 = md5
     args.write(self._oprot)
     self._oprot.writeMessageEnd()
     self._oprot.trans.flush()
@@ -287,7 +290,7 @@ class Processor(Iface, TProcessor):
     args.read(iprot)
     iprot.readMessageEnd()
     result = finish_sending_result()
-    self._handler.finish_sending(args.job_id)
+    self._handler.finish_sending(args.job_id, args.md5)
     oprot.writeMessageBegin("finish_sending", TMessageType.REPLY, seqid)
     result.write(oprot)
     oprot.writeMessageEnd()
@@ -818,15 +821,18 @@ class finish_sending_args:
   """
   Attributes:
    - job_id
+   - md5
   """
 
   thrift_spec = (
     None, # 0
     (1, TType.STRING, 'job_id', None, None, ), # 1
+    (2, TType.STRING, 'md5', None, None, ), # 2
   )
 
-  def __init__(self, job_id=None,):
+  def __init__(self, job_id=None, md5=None,):
     self.job_id = job_id
+    self.md5 = md5
 
   def read(self, iprot):
     if iprot.__class__ == TBinaryProtocol.TBinaryProtocolAccelerated and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None and fastbinary is not None:
@@ -840,6 +846,11 @@ class finish_sending_args:
       if fid == 1:
         if ftype == TType.STRING:
           self.job_id = iprot.readString();
+        else:
+          iprot.skip(ftype)
+      elif fid == 2:
+        if ftype == TType.STRING:
+          self.md5 = iprot.readString();
         else:
           iprot.skip(ftype)
       else:
@@ -856,6 +867,10 @@ class finish_sending_args:
       oprot.writeFieldBegin('job_id', TType.STRING, 1)
       oprot.writeString(self.job_id)
       oprot.writeFieldEnd()
+    if self.md5 is not None:
+      oprot.writeFieldBegin('md5', TType.STRING, 2)
+      oprot.writeString(self.md5)
+      oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()
 
@@ -866,6 +881,7 @@ class finish_sending_args:
   def __hash__(self):
     value = 17
     value = (value * 31) ^ hash(self.job_id)
+    value = (value * 31) ^ hash(self.md5)
     return value
 
   def __repr__(self):

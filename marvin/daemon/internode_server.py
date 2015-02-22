@@ -34,9 +34,9 @@ class MarvinThriftHandler(object):
         logging.info("DATA CHUNK RECEIVED FOR {}".format(job_id))
         append_chunk(job_id, chunk)
 
-    def finish_sending(self, job_id):
+    def finish_sending(self, job_id, md5):
         logging.info("FINISHED RECEIVING {}".format(job_id))
-        finish_sending(job_id)
+        finish_sending(job_id, md5)
 
 
 class ThriftServiceThread(threading.Thread):

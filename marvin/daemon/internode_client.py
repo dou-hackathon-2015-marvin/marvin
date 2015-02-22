@@ -30,5 +30,5 @@ class InternodeClient(object):
     def send_chunk(self, job_id, chunk):
         return self.client.send_chunk(job_id, chunk)
 
-    def finish_sending(self, job_id):
-        return self.client.finish_sending(job_id)
+    def finish_sending(self, job_id, md5):
+        return self.client.finish_sending(job_id, md5)

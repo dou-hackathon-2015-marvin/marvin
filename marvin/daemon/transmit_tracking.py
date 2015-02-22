@@ -1,10 +1,12 @@
+import os
+import hashlib
+
 from collections import namedtuple
 import logging
 from threading import Thread
 import uuid
 import time
 from .internode_client import InternodeClient
-import os
 
 jobs = {}
 
@@ -46,6 +48,8 @@ class JobProcess(Thread):
         job_obj = job_obj._replace(sent=str(long(job_obj.sent) + len(chunk)))
         save_job(self.job_id, job_obj)
 
+        self.md5.update(chunk)
+
     def run(self):
         self.i_client = InternodeClient(self.host, self.port)
 
@@ -56,10 +60,11 @@ class JobProcess(Thread):
         if is_approved:
             self.set_status(SENDING)
             self.file_obj = open(job_obj.path)
+            self.md5 = hashlib.md5()
             while long(job_obj.sent) < long(job_obj.total):
                 self.send_chunk()
                 job_obj = load_job(self.job_id)
-            self.i_client.finish_sending(self.job_id)
+            self.i_client.finish_sending(self.job_id, self.md5.hexdigest())
             self.set_status(FINISHED)
         else:
             self.set_status(CANCELED)
