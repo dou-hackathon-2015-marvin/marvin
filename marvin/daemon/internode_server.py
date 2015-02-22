@@ -28,6 +28,7 @@ class MarvinThriftHandler(object):
     def send_file_request(self, filename, job_id, size):
         logging.info("SEND FILE REQUEST [{}] {}".format(job_id, filename))
         initiate_transfer(job_id, filename, size)
+        os.system('notify-send "Receiving {}"'.format(filename))
         return True
 
     def send_chunk(self, job_id, chunk):
