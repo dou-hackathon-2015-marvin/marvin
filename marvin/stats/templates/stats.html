@@ -51,7 +51,21 @@
           </thead>
           <tbody>
             {% for file in hist_files %}
-              <tr>
+              {% if file.status == 1 %}
+                <tr class="text-success">
+                <td>
+                  <span class="glyphicon glyphicon-ok" aria-hidden="true"/>
+                  {{ file.start_time|datetime }}
+                </td>
+              {% elif file.status in [4,5] %}
+                <tr class="text-danger">
+                <td>
+                  <span class="glyphicon glyphicon-remove" aria-hidden="true"/>
+                  {{ file.start_time|datetime }}
+                </td>
+              {% else %}
+                <tr>
+              {% endif %}
                 <td>{{ file.start_time|datetime }}</td>
                 <td>{{ file.path }}</td>
                 <td>{{ file.target }}</td>
