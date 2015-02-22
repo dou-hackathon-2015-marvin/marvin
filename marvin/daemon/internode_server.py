@@ -1,4 +1,5 @@
 from . import zeroconf_publisher
+import subprocess
 import os
 import sys
 
@@ -28,7 +29,7 @@ class MarvinThriftHandler(object):
     def send_file_request(self, filename, job_id, size):
         logging.info("SEND FILE REQUEST [{}] {}".format(job_id, filename))
         initiate_transfer(job_id, filename, size)
-        return True
+        return subprocess.call(['zenity', '--title', 'Marvin', '--question', '--text', 'Accept file "{}"?'.format(filename)]) == 0
 
     def send_chunk(self, job_id, chunk):
         logging.info("DATA CHUNK RECEIVED FOR {}".format(job_id))
