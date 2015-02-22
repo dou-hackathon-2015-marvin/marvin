@@ -1,17 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-
-    <meta charset="utf-8">
-    <title>Marvin stats</title>
-    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-
-  </head>
-
-  <body>
-
-  <div class="container">
-
     <h2>Отправленные файлы</h2>
 
       <div id="sent" class="panel panel-default">
@@ -60,8 +46,8 @@
               <td>
 
                 <div class="progress">
-                  <div class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: 0%;">
-                    0%
+                  <div class="progress-bar" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width: {{ ((file.sent/file.total)*100)|round(0)|int }}%;">
+                    {{ ((file.sent/file.total)*100)|round(0)|int }}%
                   </div>
                 </div>
 
@@ -72,29 +58,5 @@
       </table>
     </div>
 
-  <div/>
 
-
-    <script src="{{ url_for('static', filename='js/jquery-1.11.2.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script type="text/javascript">
-      $( document ).ready(function() {
-
-          setInterval(function(){
-
-                  $.ajax({
-                      url: '{{ url_for("stats") }}',
-                      type: 'GET',
-                      success: function(response){
-                          $(".container").html(response)
-                      },
-                  });
-
-          }, 2000);
-
-      });
-    </script>
-
-  </body>
-</html>
 

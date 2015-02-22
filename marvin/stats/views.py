@@ -1,3 +1,4 @@
+import json
 
 from flask import Flask
 from flask import render_template
@@ -14,17 +15,23 @@ def sizeof_fmt(num, suffix='B'):
 app = Flask(__name__, static_url_path='/static')
 app.jinja_env.filters['sizeof_fmt'] = sizeof_fmt
 
+server = connect()
 
+
+def get_stats(templ):
+    hist_files = server.hist()
+    current_files = server.list_sending()
+    return render_template(templ,
+                           hist_files=hist_files,
+                           current_files=current_files)
 
 @app.route('/')
 def home_page():
-    # get list of transfered files
-    server = connect()
-    hist_files = server.hist()
-    current_files = server.list_sending()
-    return render_template('home_page.html',
-                           hist_files=hist_files,
-                           current_files=current_files)
+    return get_stats('home_page.html')
+
+@app.route("/stats")
+def stats():
+    return get_stats('stats.html')
 
 def start():
     app.config['PROPAGATE_EXCEPTIONS'] = True
