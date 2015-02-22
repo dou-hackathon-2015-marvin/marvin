@@ -1,6 +1,8 @@
 import hashlib
 import logging
 import os
+import mimetypes
+import subprocess
 
 jobs = {}
 
@@ -32,10 +34,16 @@ def append_chunk(job_id, chunk):
 
 
 def finish_sending(job_id, expected_md5):
+    filename = get_filename(job_id, part=False)
     received_md5 = hashlib.md5(open(get_filename(job_id, part=True), 'rb').read()).hexdigest()
     if expected_md5 != received_md5:
         logging.error("WRONG MD5: expected {} but got {}".format(expected_md5, received_md5))
 
-        os.rename(get_filename(job_id, part=True), get_filename(job_id, part=False) + ".error")
+        os.rename(get_filename(job_id, part=True), filename + ".error")
     else:
-        os.rename(get_filename(job_id, part=True), get_filename(job_id, part=False))
+        os.rename(get_filename(job_id, part=True), filename)
+        mime = mimetypes.guess_type(filename)[0]
+        if mime and mime.startswith('image/'):
+            subprocess.Popen(['xdg-open', filename])
+        else:
+            subprocess.Popen(['xdg-open', os.path.expanduser('~/Downloads/Marvin')])
