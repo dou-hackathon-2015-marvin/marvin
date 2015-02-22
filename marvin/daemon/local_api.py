@@ -11,6 +11,15 @@ from .internode_client import InternodeClient
 from . import transmit_tracking
 
 
+def ping(host, port):
+    i_client = InternodeClient(host, port)
+    try:
+        i_client.ping()
+    except Exception:
+        return False
+    return True
+
+
 class MarvinDBUSService(dbus.service.Object):
     def __init__(self):
         dbus_main_loop = DBusGMainLoop(set_as_default=True)
@@ -48,7 +57,9 @@ class MarvinDBUSService(dbus.service.Object):
 
     @dbus.service.method('ua.douhack.marvin')
     def discover(self):
-        return [host["ip_address"] for host in zeroconf_browser.find_all_marvins()]
+        return ["{} [{}]".format(host["marvin_name"], host["ip_address"], host["ip_address"])
+                for host in zeroconf_browser.find_all_marvins()]
+                # if ping(host["ip_address"], host["port"])]
 
 
 class GLibLoopThread(threading.Thread):

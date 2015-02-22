@@ -50,8 +50,6 @@ DBUS_INTERFACE_SERVICE_RESOLVER = DBUS_NAME + ".ServiceResolver"
 DBUS_INTERFACE_RECORD_BROWSER = DBUS_NAME + ".RecordBrowser"
 
 
-
-
 class ZeroconfService:
     def __init__(self, name, port, stype="_http._tcp",
                  domain="", host="", text=""):
@@ -86,7 +84,9 @@ class ZeroconfService:
         self.group.Reset()
 
 
-zeroconf_service = ZeroconfService("Marvin", 9042, "_marvin._tcp")
+import socket
+hostname = socket.gethostname()
+zeroconf_service = ZeroconfService(hostname, 9042, "_marvin._tcp")
 
 
 def register_service():
