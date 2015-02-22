@@ -547,7 +547,7 @@ class send_file_request_args:
     None, # 0
     (1, TType.STRING, 'path', None, None, ), # 1
     (2, TType.STRING, 'job_id', None, None, ), # 2
-    (3, TType.I32, 'size', None, None, ), # 3
+    (3, TType.STRING, 'size', None, None, ), # 3
   )
 
   def __init__(self, path=None, job_id=None, size=None,):
@@ -575,8 +575,8 @@ class send_file_request_args:
         else:
           iprot.skip(ftype)
       elif fid == 3:
-        if ftype == TType.I32:
-          self.size = iprot.readI32();
+        if ftype == TType.STRING:
+          self.size = iprot.readString();
         else:
           iprot.skip(ftype)
       else:
@@ -598,8 +598,8 @@ class send_file_request_args:
       oprot.writeString(self.job_id)
       oprot.writeFieldEnd()
     if self.size is not None:
-      oprot.writeFieldBegin('size', TType.I32, 3)
-      oprot.writeI32(self.size)
+      oprot.writeFieldBegin('size', TType.STRING, 3)
+      oprot.writeString(self.size)
       oprot.writeFieldEnd()
     oprot.writeFieldStop()
     oprot.writeStructEnd()

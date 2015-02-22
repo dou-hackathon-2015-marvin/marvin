@@ -12,7 +12,7 @@ jobs = {}
 
 
 JobStuct = namedtuple("job", ["id", "path", "total", "sent", "status", "start_time"])
-JobStuct_signature = '(ssiiii)'
+JobStuct_signature = '(ssssii)'
 
 CHUNK_SIZE = 10 * 1024  # 10 kb
 
@@ -43,7 +43,7 @@ class JobProcess(Thread):
         job_obj = load_job(self.job_id)
         chunk = self.file_obj.read(CHUNK_SIZE)
         self.i_client.send_chunk(self.job_id, chunk)
-        job_obj = job_obj._replace(sent=job_obj.sent + len(chunk))
+        job_obj = job_obj._replace(sent=str(long(job_obj.sent) + len(chunk)))
         save_job(self.job_id, job_obj)
 
     def run(self):
@@ -56,7 +56,7 @@ class JobProcess(Thread):
         if is_approved:
             self.set_status(SENDING)
             self.file_obj = open(job_obj.path)
-            while job_obj.sent < job_obj.total:
+            while long(job_obj.sent) < long(job_obj.total):
                 self.send_chunk()
                 job_obj = load_job(self.job_id)
             self.i_client.finish_sending(self.job_id)
@@ -71,8 +71,8 @@ def send_file(filename, target_host, target_port):
     save_job(job_id, JobStuct(
         id=job_id,
         path=filename,
-        total=os.path.getsize(filename),
-        sent=0,
+        total=str(os.path.getsize(filename)),
+        sent="0",
         status=QUEUED,
         start_time=int(time.time())
     ))
@@ -97,8 +97,8 @@ def create_test_job():
     return JobStuct(
         id="0e0fef87-612c-4b27-a43f-c9544ca69f57",
         path="/home/arturdent/testfile",
-        total=1002,
-        sent=0,
+        total="1002",
+        sent="0",
         status=SENDING,
         start_time=int(time.time())
     )

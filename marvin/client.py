@@ -51,8 +51,8 @@ def to_struct(data):
     return JobStuct(
         id=data[0],
         path=data[1],
-        total=data[2],
-        sent=data[3],
+        total=long(data[2]),
+        sent=long(data[3]),
         status=data[4],
         start_time=data[5]
     )
