@@ -96,4 +96,4 @@ def register_service():
 
 def unpublish_service():
     global zeroconf_service
-    zeroconf_service.unpuslish()
+    zeroconf_service.unpublish()
