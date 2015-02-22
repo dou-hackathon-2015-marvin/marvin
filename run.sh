@@ -8,6 +8,8 @@ if [ x"$1" == "xstop" ]; then
     rm ${RUNDIR}/marvin_daemon.pid
     kill `cat ${RUNDIR}/marvin_stats.pid` && echo "STATS STOPPED"
     rm ${RUNDIR}/marvin_stats.pid
+        kill `cat ${RUNDIR}/marvin_zeroconf_util.pid` && echo "ZEROCONF STOPPED"
+    rm ${RUNDIR}/marvin_zeroconf_util.pid
     echo "           ___ "
     echo "    ,_    '---'    _, "
     echo '    \ `-._|\_/|_.-- / '
@@ -27,6 +29,8 @@ fi
 echo "STARTING MARVIN..."
 python run_daemon.py &
 echo $! > ${RUNDIR}/marvin_daemon.pid
+python zeroconf_util.py &
+echo $! > ${RUNDIR}/marvin_zeroconf_util.pid
 #gunicorn marvin.stats.views:app -b 127.0.0.1:5000 &
 echo $! > ${RUNDIR}/marvin_stats.pid
 sleep 1

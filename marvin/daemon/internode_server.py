@@ -60,7 +60,6 @@ class ThriftServiceThread(threading.Thread):
         except KeyboardInterrupt:
             pass
         finally:
-            zeroconf_publisher.unpublish_service()
             logging.info("Stopped")
 
 
@@ -68,8 +67,6 @@ def start_internode_server():
     global service
     service = ThriftServiceThread()
     service.start()
-
-    zeroconf_publisher.register_service()
 
 
 def stop_internode_server():
