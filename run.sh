@@ -31,7 +31,7 @@ python run_daemon.py &
 echo $! > ${RUNDIR}/marvin_daemon.pid
 python zeroconf_util.py &
 echo $! > ${RUNDIR}/marvin_zeroconf_util.pid
-#gunicorn marvin.stats.views:app -b 127.0.0.1:5000 &
+gunicorn marvin.stats.views:app -b 127.0.0.1:5000 &
 echo $! > ${RUNDIR}/marvin_stats.pid
 sleep 1
 
