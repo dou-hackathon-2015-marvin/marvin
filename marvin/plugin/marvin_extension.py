@@ -28,9 +28,9 @@ class MarvinExtension(GObject.GObject, Nautilus.MenuProvider):
             tip='Send file via network'
         )
         item.set_submenu(submenu)
-        for i, ip in enumerate(ips):
+        for i, (name, ip) in enumerate(ips):
             ip_item = Nautilus.MenuItem(name='MarvinExtension::Send{}'.format(i),
-                                        label=ip)
+                                        label=name)
             ip_item.connect('activate', self.send_file, file, ip)
             submenu.append_item(ip_item)
 

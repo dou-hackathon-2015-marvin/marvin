@@ -57,10 +57,10 @@ class MarvinDBUSService(dbus.service.Object):
 
     @dbus.service.method('ua.douhack.marvin')
     def discover(self):
-        return dbus.Array(["{} [{}]".format(host["marvin_name"],
-                                            host["ip_address"], host["ip_address"])
+        return dbus.Array([("{} [{}]".format(host["marvin_name"],
+                                            host["ip_address"], host["ip_address"]), host["ip_address"])
                             for host in zeroconf_browser.find_all_marvins()],
-                          signature=dbus.Signature('s'))
+                          signature=dbus.Signature('(ss)'))
                 # if ping(host["ip_address"], host["port"])]
 
 
