@@ -65,6 +65,9 @@
                 </td>
               {% else %}
                 <tr>
+                <td>
+                  {{ file.start_time|datetime }}
+                </td>
               {% endif %}
                 <td>{{ file.path }}</td>
                 <td>{{ file.target }}</td>
