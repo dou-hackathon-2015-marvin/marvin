@@ -11,8 +11,8 @@ jobs = {}
 (SENDING, FINISHED, QUEUED, PENDING, CANCELED, ERROR) = range(6)
 
 
-JobStuct = namedtuple("job", ["id", "path", "total", "sent", "status", "start_time"])
-JobStuct_signature = '(ssssii)'
+JobStuct = namedtuple("job", ["id", "path", "total", "sent", "status", "start_time", "target"])
+JobStuct_signature = '(ssssiis)'
 
 CHUNK_SIZE = 10 * 1024  # 10 kb
 
@@ -74,7 +74,8 @@ def send_file(filename, target_host, target_port):
         total=str(os.path.getsize(filename)),
         sent="0",
         status=QUEUED,
-        start_time=int(time.time())
+        start_time=int(time.time()),
+        target=target_host
     ))
     thread = JobProcess(job_id, target_host, target_port)
     thread.start()
@@ -100,7 +101,8 @@ def create_test_job():
         total="1002",
         sent="0",
         status=SENDING,
-        start_time=int(time.time())
+        start_time=int(time.time()),
+        target="127.0.0.1"
     )
 
 
