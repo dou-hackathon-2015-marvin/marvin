@@ -15,12 +15,19 @@ def initiate_transfer(job_id, filename, total):
         pass
 
 
-def get_filename(job_id):
+def get_filename(job_id, part=True):
     job = jobs[job_id]
     home = os.path.expanduser("~")
-    return os.path.join(home, "Downloads", "Marvin", job["filename"])
+    f = os.path.join(home, "Downloads", "Marvin", job["filename"])
+    if part:
+        f += ".part"
+    return f
 
 
 def append_chunk(job_id, chunk):
     with open(get_filename(job_id), "a+") as f:
         f.write(chunk)
+
+
+def finish_sending(job_id):
+    os.rename(get_filename(job_id, part=True), get_filename(job_id, part=False))

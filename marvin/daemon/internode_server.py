@@ -1,3 +1,4 @@
+from . import zeroconf_utils
 import os
 import sys
 
@@ -14,7 +15,7 @@ from thrift.transport import TSocket, TTransport
 
 from Marvin import MarvinService
 
-from .receive_tracking import initiate_transfer, append_chunk
+from .receive_tracking import initiate_transfer, append_chunk, finish_sending
 
 
 class MarvinThriftHandler(object):
@@ -35,6 +36,7 @@ class MarvinThriftHandler(object):
 
     def finish_sending(self, job_id):
         logging.info("FINISHED RECEIVING {}".format(job_id))
+        finish_sending(job_id)
 
 
 class ThriftServiceThread(threading.Thread):
@@ -65,6 +67,8 @@ def start_internode_server():
     global service
     service = ThriftServiceThread()
     service.start()
+
+    zeroconf_utils.register_service()
 
 
 def stop_internode_server():

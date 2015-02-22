@@ -28,7 +28,8 @@ class MarvinDBUSService(dbus.service.Object):
 
     @dbus.service.method('ua.douhack.marvin')
     def list_sending(self):
-        return dbus.Array(transmit_tracking.get_sending_jobs(), signature=dbus.Signature('(ssiii)'))
+        return dbus.Array(transmit_tracking.get_sending_jobs(),
+                          signature=dbus.Signature(transmit_tracking.JobStuct_signature))
 
     @dbus.service.method('ua.douhack.marvin')
     def send_file(self, filename, target_host, target_port):
@@ -42,7 +43,7 @@ class MarvinDBUSService(dbus.service.Object):
     @dbus.service.method('ua.douhack.marvin')
     def hist(self):
         s = transmit_tracking.get_jobs()
-        return dbus.Array(s, signature=dbus.Signature('(ssiii)'))
+        return dbus.Array(s, signature=dbus.Signature(transmit_tracking.JobStuct_signature))
 
     @dbus.service.method('ua.douhack.marvin')
     def discover(self):

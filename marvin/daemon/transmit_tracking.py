@@ -2,6 +2,7 @@ from collections import namedtuple
 import logging
 from threading import Thread
 import uuid
+import time
 from .internode_client import InternodeClient
 import os
 
@@ -10,7 +11,8 @@ jobs = {}
 (SENDING, FINISHED, QUEUED, PENDING, CANCELED, ERROR) = range(6)
 
 
-JobStuct = namedtuple("job", ["id", "path", "total", "sent", "status"])
+JobStuct = namedtuple("job", ["id", "path", "total", "sent", "status", "start_time"])
+JobStuct_signature = '(ssiiii)'
 
 CHUNK_SIZE = 10 * 1024  # 10 kb
 
@@ -71,7 +73,8 @@ def send_file(filename, target_host, target_port):
         path=filename,
         total=os.path.getsize(filename),
         sent=0,
-        status=QUEUED
+        status=QUEUED,
+        start_time=int(time.time())
     ))
     thread = JobProcess(job_id, target_host, target_port)
     thread.start()
@@ -96,7 +99,8 @@ def create_test_job():
         path="/home/arturdent/testfile",
         total=1002,
         sent=0,
-        status=SENDING
+        status=SENDING,
+        start_time=int(time.time())
     )
 
 

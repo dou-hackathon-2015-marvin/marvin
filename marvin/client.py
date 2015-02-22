@@ -53,5 +53,6 @@ def to_struct(data):
         path=data[1],
         total=data[2],
         sent=data[3],
-        status=data[4]
+        status=data[4],
+        start_time=data[5]
     )
