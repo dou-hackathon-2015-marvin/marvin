@@ -36,6 +36,16 @@ def append_chunk(job_id, chunk):
         f.write(chunk)
 
 
+def is_known_mimetype(mimetype):
+    known_mimetypes = {
+        'application/pdf', 'text/plain', 'application/msword',
+        'application/vnd.ms-excel'
+    }
+
+    if mimetype.startswith('image/') or mimetype in known_mimetypes:
+        return True
+
+
 def finish_sending(job_id, expected_md5):
     path = get_path(job_id)
     path_part = get_path(job_id, part=True)
@@ -55,8 +65,8 @@ def finish_sending(job_id, expected_md5):
         os.rename(path_part, path_error)
     else:
         os.rename(path_part, path)
-        mime = mimetypes.guess_type(path)[0]
-        if mime and mime.startswith('image/'):
+        mimetype = mimetypes.guess_type(path)[0]
+        if mimetype and is_known_mimetype(mimetype):
             subprocess.Popen(['xdg-open', path])
         else:
-            subprocess.Popen(['xdg-open', DOWNLOAD_DIR])
+            subprocess.Popen(['xdg-open', os.path.dirname(path)])

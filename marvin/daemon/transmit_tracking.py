@@ -71,7 +71,6 @@ class JobProcess(Thread):
             self.set_status(CANCELED)
 
 
-
 def send_file(filename, target_host, target_port):
     job_id = str(uuid.uuid4())
     save_job(job_id, JobStuct(
