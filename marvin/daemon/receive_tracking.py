@@ -4,6 +4,10 @@ import os
 import mimetypes
 import subprocess
 
+
+CHUNK_SIZE = 10 * 1024  # 10 kb
+
+
 jobs = {}
 
 
@@ -35,7 +39,14 @@ def append_chunk(job_id, chunk):
 
 def finish_sending(job_id, expected_md5):
     filename = get_filename(job_id, part=False)
-    received_md5 = hashlib.md5(open(get_filename(job_id, part=True), 'rb').read()).hexdigest()
+    received_md5 = hashlib.md5()
+    with open(get_filename(job_id, part=True), 'rb') as file_obj:
+        while True:
+            chunk = file_obj.read(CHUNK_SIZE)
+            if not chunk:
+                break
+            received_md5.update(chunk)
+    received_md5 = received_md5.hexdigest()
     if expected_md5 != received_md5:
         logging.error("WRONG MD5: expected {} but got {}".format(expected_md5, received_md5))
 
