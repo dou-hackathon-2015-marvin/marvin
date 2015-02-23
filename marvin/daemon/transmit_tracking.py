@@ -59,11 +59,12 @@ class JobProcess(Thread):
         logging.info("FILE REQUEST SENT: {}".format(is_approved))
         if is_approved:
             self.set_status(SENDING)
-            self.file_obj = open(job_obj.path)
             self.md5 = hashlib.md5()
-            while long(job_obj.sent) < long(job_obj.total):
-                self.send_chunk()
-                job_obj = load_job(self.job_id)
+            with open(job_obj.path) as file_obj:
+                self.file_obj = file_obj
+                while long(job_obj.sent) < long(job_obj.total):
+                    self.send_chunk()
+                    job_obj = load_job(self.job_id)
             self.i_client.finish_sending(self.job_id, self.md5.hexdigest())
             self.set_status(FINISHED)
         else:
