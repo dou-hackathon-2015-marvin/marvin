@@ -19,27 +19,30 @@ def initiate_transfer(job_id, filename, total):
         'total': total,
     }
 
-    with open(get_filename(job_id), 'w'):
+    with open(get_path(job_id, part=True), 'w'):
         pass
 
 
-def get_filename(job_id, part=True):
+def get_path(job_id, part=False):
     job = jobs[job_id]
     f = os.path.join(DOWNLOAD_DIR, job['filename'])
     if part:
-        f += ".part"
+        return f + '.part'
     return f
 
 
 def append_chunk(job_id, chunk):
-    with open(get_filename(job_id), 'a+') as f:
+    with open(get_path(job_id, part=True), 'a+') as f:
         f.write(chunk)
 
 
 def finish_sending(job_id, expected_md5):
-    filename = get_filename(job_id, part=False)
+    path = get_path(job_id)
+    path_part = get_path(job_id, part=True)
+    path_error = path + '.error'
+
     received_md5 = hashlib.md5()
-    with open(get_filename(job_id, part=True), 'rb') as file_obj:
+    with open(path_part, 'rb') as file_obj:
         while True:
             chunk = file_obj.read(CHUNK_SIZE)
             if not chunk:
@@ -49,11 +52,11 @@ def finish_sending(job_id, expected_md5):
     if expected_md5 != received_md5:
         logging.error("WRONG MD5: expected {} but got {}".format(expected_md5, received_md5))
 
-        os.rename(get_filename(job_id, part=True), filename + '.error')
+        os.rename(path_part, path_error)
     else:
-        os.rename(get_filename(job_id, part=True), filename)
-        mime = mimetypes.guess_type(filename)[0]
+        os.rename(path_part, path)
+        mime = mimetypes.guess_type(path)[0]
         if mime and mime.startswith('image/'):
-            subprocess.Popen(['xdg-open', filename])
+            subprocess.Popen(['xdg-open', path])
         else:
             subprocess.Popen(['xdg-open', DOWNLOAD_DIR])
